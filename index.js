@@ -19,7 +19,7 @@ app.use(session({
 }));
 
 app.use(lusca({
-    csrf: true,
+    csrf: false,
     csp: { /* ... */},
     xframe: false,
     p3p: 'ABCDEF',
