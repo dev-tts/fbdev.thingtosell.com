@@ -13,15 +13,16 @@ app.use(kraken(options));
 
 //this or other session management will be required
 app.use(session({
-    secret: 'abc',
+    secret: 'tts-fbdev',
     resave: true,
     saveUninitialized: true
 }));
 
+app.use(lusca.xframe(false));
+app.use(lusca.csrf(false));
+
 app.use(lusca({
-    csrf: false,
     csp: { /* ... */},
-    xframe: false,
     p3p: 'ABCDEF',
     hsts: {maxAge: 31536000, includeSubDomains: true, preload: true},
     xssProtection: true
