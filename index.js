@@ -6,7 +6,7 @@ var kraken = require('kraken-js'),
     session = require('express-session'),
     lusca = require('lusca'),
     options = require('./lib/spec')(),
-    port = process.env.PORT || 8000;
+    port = process.env.PORT || 3010;
 
 
 app.use(kraken(options));
