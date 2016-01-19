@@ -13,17 +13,16 @@
 
 <button name="my_full_name" onclick="ShowMyName()" value="My Name" />
 <script language="javascript" type="text/javascript">
+var message_str= 'Facebook JavaScript Graph API Tutorial';
 function ShowMyName() {
         FB.api("/me",
                 function (response) {
                     alert('Name is ' + response.name);
                 });
 
-var message_str= 'Facebook JavaScript Graph API Tutorial';
-
 FB.api('/me/feed', 'post', { message: message_str}, function(response) {
   if (!response || response.error) {
-    alert('Couldn't Publish Data');
+    console.log('Could not Publish Data');
   } else {
     alert("Message successfully posted to your wall");
   }
