@@ -20,9 +20,21 @@ function ShowMyName() {
                     alert('Name is ' + response.name);
                 });
 
+FB.ui({
+  method: 'share_open_graph',
+  action_type: 'og.likes',
+  action_properties: JSON.stringify({
+    object:'https://developers.facebook.com/docs/',
+  })
+}, function(response){
+  // Debug response (optional)
+  console.log(response);
+});
+
 FB.api('/me/feed', 'post', { message: message_str}, function(response) {
   if (!response || response.error) {
     console.log('Could not Publish Data');
+console.log(response);
   } else {
     alert("Message successfully posted to your wall");
   }
