@@ -254,7 +254,7 @@ var Friends = {
     FB.getLoginStatus(function (response) {
       if (!response.authResponse) {
         alert('You must log in first!');
-        // alert('You are not connected');
+        console.log('You are not connected');
         return;
       }
 
