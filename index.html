@@ -1,43 +1,204 @@
-<script src="https://connect.facebook.net/en_US/all.js"></script>
+<!DOCTYPE html class="no-js">
+<html xmlns:fb="http://www.facebook.com/2008/fbml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="keywords" content="Facebook web app" />
+    <meta name="author" content="Leo Hsieh" />
+    <meta name="description" content="Facebook app Development" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="css/start/jquery-ui-1.8.17.custom.css" rel="stylesheet" />
+    <title>Top Friends FaceBook App</title>
+    <!--[if lt IE 9]>
+        <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    </head>
+    <body>
 
-<fb:login-button autologoutlink="true" onlogin="OnRequestPermission();">
-</fb:login-button>
-<script language="javascript" type="text/javascript">
-      FB.init({
-         appId: '1517651635230972',
-         status: true, 
-         cookie: true, 
-         xfbml: true
-         });    
-       </script>
+      <a id="github" target="blank" href="https://github.com/LeoAJ/TopFriendsFaceBookWebApp"><img src="http://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+      <header>
+        <h1>Top Friends FaceBook App</h1>
+        <!--[if lt IE 7]>
+          <p class="info">Sorry, but this app does not support IE6 or lower.</p>
+        <![endif]-->
+      </header>
+      <img id="loader" alt="loader" src="css/img/loader.gif">
+      <div id="container">
 
-<button name="my_full_name" onclick="ShowMyName()" value="My Name" />
-<script language="javascript" type="text/javascript">
-var message_str= 'Facebook JavaScript Graph API Tutorial';
-function ShowMyName() {
-        FB.api("/me",
-                function (response) {
-                    alert('Name is ' + response.name);
-                });
+        <div class="demo rounded" id="login">
+          <p id="fb_login"><fb:login-button width="80" autologoutlink="true" scope="read_stream"></fb:login-button></p>
+          <div id="photo_back">
+            <p id="fb_photo"><fb:profile-pic uid="loggedinuser" size="small" facebook-logo="true"></fb:profile-pic></p>
+          </div>
+          <img id="head" alt="user" src="css/img/Users.png" />
+          <button id="getButton">Get</button>
+          <img id="startSign" alt="start" src="css/img/start.png">
+          <img id="getSign" alt="get" src="css/img/get.png">
+          <img id="checkSign" alt="check" src="css/img/check.png">
+        </div>
 
-FB.ui({
-  method: 'share_open_graph',
-  action_type: 'og.likes',
-  action_properties: JSON.stringify({
-    object:'https://developers.facebook.com/docs/',
-  })
-}, function(response){
-  // Debug response (optional)
-  console.log(response);
-});
+      <div id="wrapper" class="rounded">
+        <ul id="navbar">
+          <li><a data-info="self" href="">My Info</a></li>
+          <li><a data-info="friends" href="">My Friends Info</a></li>
+        </ul>
+        <script id="selfTemplate" type="text/x-handlebars-template">
+          <div id="myInfo">
+            {{#each this}}
+            <li>
+              {{#if msgFlag}}
+                {{reg_msg}}
+              {{else}}
+                <span>{{msg}}</span>
+              {{/if}}
 
-FB.api('/me/feed', 'post', { message: message_str}, function(response) {
-  if (!response || response.error) {
-    console.log('Could not Publish Data');
-console.log(response);
-  } else {
-    alert("Message successfully posted to your wall");
-  }
-});
-    }
-</script>
+              {{#if video}}
+                <a target="_blank" href={{video}}>(Youtube)</a>
+                {{/if}}
+
+                {{#with withObj}}
+              <small>
+                {{withTag}}
+                {{#each withFriends}}
+                  <a target="_blank" href={{href}}>{{name}}</a>
+                  <small>{{comma}}</small>
+                {{/each}}
+              </small>
+              {{/with}}
+
+              {{#with place}}
+              <small>{{at}}<a target="_blank" href={{placeURL}}>{{placeName}}</a></small>
+              {{/with}}
+
+              {{#if num}}
+              <br />
+              <small>(You have tagged <em>{{num}}</em> friends in this post)</small>
+              {{/if}}
+
+                {{#if picture}}
+                <br />
+                <img src={{picture}} alt="picture" />
+                {{/if}}
+
+                <br />
+              <span class="notation">Like:<em>{{like}}</em> Comments:<em>{{comment}}</em></span>
+            </li>
+            <hr />
+            {{/each}}
+          </div>
+        </script>
+        <script id="friendsTemplate" type="text/x-handlebars-template">
+          <div id="friendsInfo">
+            <ol class="friendsList">
+            {{#each this}}
+            <li>
+              <h3>{{name}}</h3>
+
+              <br />
+              <ul class="reply">
+                <li>Click <strong>"Like"</strong> on your posts : <em>{{like}}</em></li>
+                <li><strong>Comments</strong> on your posts : <em>{{comment}}</em></li>
+                <li><strong>Post</strong> on your wall : <em>{{post}}</em></li>
+              </ul>
+              <img class="image-item" src="{{src}}" alt="{{name}}" title="{{name}}" />
+            </li>
+            {{/each}}
+            </ol>
+          </div>
+        </script>
+      </div>
+
+      <div id="noticeBoard" class="rounded">
+        <span id="number"></span>
+        <div id="notice"></div>
+        </div>
+        <nav class="toc rounded">
+        <ul class="menu">
+          <li>Function List</li>
+          <ol class="drop">
+            <li id="genderRatio">Gender Ratio</li>
+          </ol>
+        </ul>
+        </nav>
+      </div>
+
+      <!-- ui-dialog -->
+    <div id="dialog" title="Gender Ratio">
+      <canvas id="FB_canvas" height="100" width="280"></canvas>
+
+      <div id="ratio"><h1></h1></div>
+      <div id="gender">
+        <div id="female"><h3>Female:<em></em></h3></div>
+        <div id="male"><h3>Male:<em></em></h3></div>
+      </div>
+    </div>
+    <hr>
+    <div class="clear"></div>
+    <footer>
+      <div id="contact">
+        &copy <a href="http://www.cs.usfca.edu/~lhsieh/website/Leos_Site/" target="_blank">Leo Hsieh</a> 2012&nbsp;<a href="http://www.linkedin.com/in/leohsieh" target="_blank">Linkedin</a><br>Powered by <a href="http://jquery.com/" target="_blank">jQuery</a>, <a href="http://handlebarsjs.com/" target="_blank">handlebars</a> and <a href="http://modernizr.com/" target="_blank">Modernizr</a>
+      </div>
+    </footer>
+
+    <div id="fb-root"></div>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.8.17/jquery-ui.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0.beta2/handlebars.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.5.3/modernizr.min.js"></script>
+    <script src="js/Friends.js"></script>
+      <script>
+        function init(response) {
+          var startSign = $('#startSign'),
+            getSign = $('#getSign'),
+            checkSign = $('#checkSign'),
+            friends = Friends;
+
+          checkSign.slideUp('slow');
+
+          if (response.status !== 'connected') {
+            friends.loginCallback();
+            getSign.slideUp('slow', function () {
+              startSign.slideDown('slow');
+            });
+          } else {
+            startSign.slideUp('slow', function () {
+              getSign.slideDown('slow');
+            });
+          }
+        }
+
+        window.fbAsyncInit = function () {
+          FB.init({
+            appId: '112082312216656',
+            status: true,
+            cookie: true,
+            xfbml: true,
+            oauth: true
+          });
+
+          FB.getLoginStatus(function (response) {
+            init(response);
+          });
+
+          // operate the start sign
+          FB.Event.subscribe('auth.statusChange', function (response) {
+            init(response);
+          });
+        };
+        (function () {
+          var e = document.createElement('script');
+          e.async = true;
+          e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+          document.getElementById('fb-root').appendChild(e);
+        }());
+        $(function () {
+          var friends = Friends;
+
+          // set browser height
+          $('body').height($(window).height());
+          friends.init();
+        });
+      </script>
+
+  </body>
+</html>

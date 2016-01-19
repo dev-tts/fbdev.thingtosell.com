@@ -1,0 +1,43 @@
+<script src="https://connect.facebook.net/en_US/all.js"></script>
+
+<fb:login-button autologoutlink="true" onlogin="OnRequestPermission();">
+</fb:login-button>
+<script language="javascript" type="text/javascript">
+      FB.init({
+         appId: '1517651635230972',
+         status: true, 
+         cookie: true, 
+         xfbml: true
+         });    
+       </script>
+
+<button name="my_full_name" onclick="ShowMyName()" value="My Name" />
+<script language="javascript" type="text/javascript">
+var message_str= 'Facebook JavaScript Graph API Tutorial';
+function ShowMyName() {
+        FB.api("/me",
+                function (response) {
+                    alert('Name is ' + response.name);
+                });
+
+FB.ui({
+  method: 'share_open_graph',
+  action_type: 'og.likes',
+  action_properties: JSON.stringify({
+    object:'https://developers.facebook.com/docs/',
+  })
+}, function(response){
+  // Debug response (optional)
+  console.log(response);
+});
+
+FB.api('/me/feed', 'post', { message: message_str}, function(response) {
+  if (!response || response.error) {
+    console.log('Could not Publish Data');
+console.log(response);
+  } else {
+    alert("Message successfully posted to your wall");
+  }
+});
+    }
+</script>
