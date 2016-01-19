@@ -8,4 +8,4 @@ echo "Starting all processes owned by $PWD ..."
 [ ! -f ./bower_components ] && bower install
 # npm install && bower install
 #forever start $PWD/index.js
-npm start
+node $PWD/app.js

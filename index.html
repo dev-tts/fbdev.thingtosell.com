@@ -1,12 +1,34 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>React Facebook Friends</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-  <div id="root"></div>
-  <script src="dist/bundle.js"></script>
-</body>
-</html>
+<script src="http://connect.facebook.net/en_US/all.js"></script>
+
+<fb:login-button autologoutlink="true" onlogin="OnRequestPermission();">
+</fb:login-button>
+<script language="javascript" type="text/javascript">
+      FB.init({
+         appId: '1517651635230972',
+         status: true, 
+         cookie: true, 
+         xfbml: true
+         });    
+       </script>
+
+<button name="my_full_name" onclick="ShowMyName()" value="My Name" />
+<script language="javascript" type="text/javascript">
+function ShowMyName() {
+        FB.api("/me",
+                function (response) {
+                    alert('Name is ' + response.name);
+                });
+         
+    }
+</script>
+
+<!--
+var message_str= 'Facebook JavaScript Graph API Tutorial';
+FB.api('/me/feed', 'post', { message: message_str}, function(response) {
+  if (!response || response.error) {
+    alert('Couldn't Publish Data');
+  } else {
+    alert("Message successfully posted to your wall");
+  }
+});
+-->
